@@ -46,15 +46,34 @@ function drawPaddle() {
   ctx.fillRect(paddleX, paddleY, paddleWidth, paddleHeight);
 }
 
+// Bricks
+makeBricks(BrickRow, BrickCol);
+
+function drawBrick() {
+  ctx.fillStyle = "royalblue";
+  for (let i = 0; i < BrickRow; i++) {
+    for (let j = 0; j < BrickCol; j++) {
+      let brick = Bricks[i][j];
+      if (brick.hit) continue;
+      ctx.fillRect(brick.x, brick.y, BrickWidth, BrickHeight);
+    }
+  }
+}
+
+// game loop
 function animate() {
-  // game loop
   ctx.fillStyle = "#dce0e3";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  drawPaddle();
-  drawCircle(x, y);
+  // check
   checkCorner(x, y, ballRadius);
   checkPaddle();
+  checkBrick();
+
+  // draw
+  drawPaddle();
+  drawCircle(x, y);
+  drawBrick();
 
   if (keys.ArrowLeft.pressed && lastKey === "ArrowLeft") {
     paddleX -= paddleSpeed;
@@ -62,7 +81,7 @@ function animate() {
     paddleX += paddleSpeed;
   }
 
-  if (y > canvas.height) {
+  if (y + ballRadius > canvas.height) {
     dx = 0;
     dy = 0;
     document.querySelector("#gameover").style.display = "initial";
@@ -75,28 +94,8 @@ function animate() {
 
 animate();
 
-window.addEventListener("keydown", (e) => {
-  switch (e.key) {
-    case "ArrowLeft":
-      console.log("left");
-      keys.ArrowLeft.pressed = true;
-      lastKey = "ArrowLeft";
-      break;
-    case "ArrowRight":
-      console.log("right");
-      keys.ArrowRight.pressed = true;
-      lastKey = "ArrowRight";
-      break;
-  }
-});
-
-window.addEventListener("keyup", (e) => {
-  switch (e.key) {
-    case "ArrowLeft":
-      keys.ArrowLeft.pressed = false;
-      break;
-    case "ArrowRight":
-      keys.ArrowRight.pressed = false;
-      break;
-  }
-});
+/*
+ brick 추가
+ score 추가하기
+ 클래스로? -> 공을 추가한다면?  -> paddle을 추가한다면?
+*/
