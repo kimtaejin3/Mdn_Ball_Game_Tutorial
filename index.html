@@ -6,7 +6,21 @@
     <title>Brick Braker</title>
   </head>
   <body>
-    <canvas></canvas>
+    <div style="position: relative; display: inline-block">
+      <span
+        id="gameover"
+        style="
+          color: royalblue;
+          display: none;
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+        "
+        >game over</span
+      >
+      <canvas> </canvas>
+    </div>
     <script src="./util.js"></script>
     <script src="./index.js"></script>
   </body>

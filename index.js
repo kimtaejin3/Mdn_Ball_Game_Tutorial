@@ -13,11 +13,24 @@ let y = canvas.height - ballRadius;
 let dx = ballSpeed;
 let dy = ballSpeed;
 
+const paddleWidth = 55;
+const paddleHeight = 10;
+
 let paddleX = 0;
-let paddleY = canvas.height - 10;
+let paddleY = canvas.height - paddleHeight;
 
 let lastKey;
 const paddleSpeed = 8;
+
+// keys
+const keys = {
+  ArrowRight: {
+    pressed: false,
+  },
+  ArrowLeft: {
+    pressed: false,
+  },
+};
 
 //draw functions
 function drawCircle(x, y) {
@@ -30,26 +43,18 @@ function drawCircle(x, y) {
 
 function drawPaddle() {
   ctx.fillStyle = "royalblue";
-  ctx.fillRect(paddleX, paddleY, 55, 10);
+  ctx.fillRect(paddleX, paddleY, paddleWidth, paddleHeight);
 }
 
-// keys
-const keys = {
-  ArrowRight: {
-    pressed: false,
-  },
-  ArrowLeft: {
-    pressed: false,
-  },
-};
-
 function animate() {
+  // game loop
   ctx.fillStyle = "#dce0e3";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   drawPaddle();
   drawCircle(x, y);
   checkCorner(x, y, ballRadius);
+  checkPaddle();
 
   if (keys.ArrowLeft.pressed && lastKey === "ArrowLeft") {
     paddleX -= paddleSpeed;
@@ -57,8 +62,14 @@ function animate() {
     paddleX += paddleSpeed;
   }
 
+  if (y > canvas.height) {
+    dx = 0;
+    dy = 0;
+    document.querySelector("#gameover").style.display = "initial";
+  }
   x -= dx;
   y -= dy;
+
   requestAnimationFrame(animate);
 }
 
