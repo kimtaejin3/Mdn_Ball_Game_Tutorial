@@ -5,6 +5,8 @@ canvas.width = 600;
 canvas.height = 400;
 
 const ballRadius = 11;
+let x = canvas.width / 2;
+let y = canvas.height;
 
 function circle() {
   ctx.fillStyle = "royalblue";
