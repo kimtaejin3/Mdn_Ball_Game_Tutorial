@@ -6,7 +6,7 @@ canvas.width = 600;
 canvas.height = 400;
 
 const ballRadius = 12;
-let ballSpeed = 4;
+let ballSpeed = -5;
 let x = canvas.width / 2;
 let y = canvas.height - ballRadius;
 
@@ -80,14 +80,16 @@ function animate() {
   } else if (keys.ArrowRight.pressed && lastKey === "ArrowRight") {
     paddleX += paddleSpeed;
   }
+  x += dx;
+  y += dy;
 
   if (y + ballRadius > canvas.height) {
     dx = 0;
     dy = 0;
     document.querySelector("#gameover").style.display = "initial";
   }
-  x -= dx;
-  y -= dy;
+
+  console.log(dy);
 
   requestAnimationFrame(animate);
 }

@@ -13,11 +13,13 @@ function checkPaddle() {
     x > paddleX &&
     x < paddleX + paddleWidth
   ) {
+    if (dy < 0) return;
     dy *= -1;
   }
 }
 
 function checkBrick() {
+  let f = false;
   for (let i = 0; i < BrickRow; i++) {
     for (let j = 0; j < BrickCol; j++) {
       let brick = Bricks[i][j];
@@ -27,11 +29,21 @@ function checkBrick() {
       if (
         y - ballRadius < brick.y + BrickHeight &&
         y + ballRadius > brick.y &&
-        x > brick.x &&
-        x < brick.x + BrickWidth
+        x + ballRadius > brick.x &&
+        x - ballRadius < brick.x + BrickWidth
       ) {
         brick.hit = true;
-        dy = dy * -1;
+        dy = -dy;
+
+        if ((x < brick.x && dx > 0) || (x > brick.x + BrickWidth && dx < 0)) {
+          if (f) {
+            continue;
+          }
+          dx = -dx;
+          // 이 경우 y의 방향이 바뀌면 안됨
+          dy = -dy;
+          f = true;
+        }
       }
 
       Bricks[i][j] = brick;
