@@ -1,24 +1,24 @@
-function checkCorner(x, y, ballRadius) {
-  if (x - ballRadius < 0 || x + ballRadius > canvas.width) {
-    dx *= -1;
+function checkCorner(ball) {
+  if (ball.x - ball.ballRadius < 0 || ball.x + ball.ballRadius > canvas.width) {
+    ball.dx *= -1;
   }
-  if (y - ballRadius < 0) {
-    dy *= -1;
+  if (ball.y - ball.ballRadius < 0) {
+    ball.dy *= -1;
   }
 }
 
-function checkPaddle() {
+function checkPaddle(ball) {
   if (
-    y + ballRadius > canvas.height - paddleHeight &&
-    x > paddleX &&
-    x < paddleX + paddleWidth
+    ball.y + ball.ballRadius > canvas.height - paddleHeight &&
+    ball.x > paddleX &&
+    ball.x < paddleX + paddleWidth
   ) {
-    if (dy < 0) return;
-    dy *= -1;
+    if (ball.dy < 0) return;
+    ball.dy *= -1;
   }
 }
 
-function checkBrick() {
+function checkBrick(ball) {
   let f = false;
   for (let i = 0; i < BrickRow; i++) {
     for (let j = 0; j < BrickCol; j++) {
@@ -27,26 +27,37 @@ function checkBrick() {
       if (brick.hit) continue;
 
       if (
-        y - ballRadius < brick.y + BrickHeight &&
-        y + ballRadius > brick.y &&
-        x + ballRadius > brick.x &&
-        x - ballRadius < brick.x + BrickWidth
+        ball.y - ball.ballRadius < brick.y + BrickHeight &&
+        ball.y + ball.ballRadius > brick.y &&
+        ball.x + ball.ballRadius > brick.x &&
+        ball.x - ball.ballRadius < brick.x + BrickWidth
       ) {
         brick.hit = true;
-        dy = -dy;
+        ball.dy = -ball.dy;
 
-        if ((x < brick.x && dx > 0) || (x > brick.x + BrickWidth && dx < 0)) {
+        if (
+          (ball.x < brick.x && ball.dx > 0) ||
+          (ball.x > brick.x + BrickWidth && ball.dx < 0)
+        ) {
           if (f) {
             continue;
           }
-          dx = -dx;
+          ball.dx = -ball.dx;
           // 이 경우 y의 방향이 바뀌면 안됨
-          dy = -dy;
+          ball.dy = -ball.dy;
           f = true;
         }
       }
 
       Bricks[i][j] = brick;
     }
+  }
+}
+
+function isGameOver(ball) {
+  if (ball.y + ball.ballRadius > canvas.height) {
+    ball.dx = 0;
+    ball.dy = 0;
+    document.querySelector("#gameover").style.display = "initial";
   }
 }

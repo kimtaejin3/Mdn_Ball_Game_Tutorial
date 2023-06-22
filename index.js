@@ -5,18 +5,17 @@ const ctx = canvas.getContext("2d");
 canvas.width = 600;
 canvas.height = 400;
 
-const ballRadius = 12;
-let ballSpeed = -5;
-let x = canvas.width / 2;
-let y = canvas.height - ballRadius;
-
-let dx = ballSpeed;
-let dy = ballSpeed;
+const ball = new Ball({
+  x: canvas.width / 2,
+  y: canvas.height - 20,
+  ballSpeed: -5,
+  ballRadius: 12,
+});
 
 const paddleWidth = 55;
 const paddleHeight = 10;
 
-let paddleX = 0;
+let paddleX = canvas.width / 2 - paddleWidth;
 let paddleY = canvas.height - paddleHeight;
 
 let lastKey;
@@ -31,15 +30,6 @@ const keys = {
     pressed: false,
   },
 };
-
-//draw functions
-function drawCircle(x, y) {
-  ctx.beginPath();
-  ctx.fillStyle = "royalblue";
-  ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.closePath();
-}
 
 function drawPaddle() {
   ctx.fillStyle = "royalblue";
@@ -66,30 +56,24 @@ function animate() {
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   // check
-  checkCorner(x, y, ballRadius);
-  checkPaddle();
-  checkBrick();
+  checkCorner(ball);
+  checkPaddle(ball);
+  checkBrick(ball);
 
   // draw
   drawPaddle();
-  drawCircle(x, y);
   drawBrick();
+
+  // drawCircle(x, y);
+  ball.update();
 
   if (keys.ArrowLeft.pressed && lastKey === "ArrowLeft") {
     paddleX -= paddleSpeed;
   } else if (keys.ArrowRight.pressed && lastKey === "ArrowRight") {
     paddleX += paddleSpeed;
   }
-  x += dx;
-  y += dy;
 
-  if (y + ballRadius > canvas.height) {
-    dx = 0;
-    dy = 0;
-    document.querySelector("#gameover").style.display = "initial";
-  }
-
-  console.log(dy);
+  isGameOver(ball);
 
   requestAnimationFrame(animate);
 }
