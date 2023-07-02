@@ -33,6 +33,24 @@ function checkBrick(ball) {
         ball.x - ball.ballRadius < brick.x + BrickWidth
       ) {
         brick.hit = true;
+
+        for (let i = 0; i < 15; i++) {
+          brickParticles.push(
+            new BrickParticle({
+              position: {
+                x: Math.floor(Math.random() * BrickWidth + brick.x) + 15,
+                y: Math.floor(Math.random() * BrickHeight + brick.y) + 15,
+              },
+              velocity: {
+                x: (Math.random() - 0.5) * 2,
+                y: 1,
+              },
+              radius: Math.random() * 3,
+              color: "royalblue",
+            })
+          );
+        }
+
         ball.dy = -ball.dy;
 
         if (

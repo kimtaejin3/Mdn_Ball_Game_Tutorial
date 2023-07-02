@@ -5,6 +5,7 @@ const ctx = canvas.getContext("2d");
 canvas.width = 600;
 canvas.height = 400;
 
+// ball
 const ball = new Ball({
   x: canvas.width / 2,
   y: canvas.height - 20,
@@ -12,16 +13,20 @@ const ball = new Ball({
   ballRadius: 12,
 });
 
+//paddle
 const paddleWidth = 55;
 const paddleHeight = 10;
 
 let paddleX = canvas.width / 2 - paddleWidth;
 let paddleY = canvas.height - paddleHeight;
 
-let lastKey;
 const paddleSpeed = 8;
 
+// brick particles
+const brickParticles = [];
+
 // keys
+let lastKey;
 const keys = {
   ArrowRight: {
     pressed: false,
@@ -66,6 +71,13 @@ function animate() {
 
   // drawCircle(x, y);
   ball.update();
+
+  // brick Particles update
+  brickParticles.forEach((particle, index) => {
+    if (particle.opacity <= 0) {
+      brickParticles.splice(index, 1);
+    } else particle.update();
+  });
 
   if (keys.ArrowLeft.pressed && lastKey === "ArrowLeft") {
     paddleX -= paddleSpeed;
