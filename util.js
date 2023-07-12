@@ -34,7 +34,7 @@ function checkBrick(ball) {
       ) {
         brick.hit = true;
 
-        for (let i = 0; i < 15; i++) {
+        for (let i = 0; i < 35; i++) {
           brickParticles.push(
             new BrickParticle({
               position: {
